@@ -1,8 +1,6 @@
 package main
 
 import (
-	"sort"
-
 	"gonum.org/v1/gonum/graph"
 	"gonum.org/v1/gonum/graph/simple"
 )
@@ -30,27 +28,11 @@ func makeComplete(n int) *simple.UndirectedGraph {
 	return g
 }
 
+// show that all nodes are reachable from each other
+// number of edges in complete graph of n nodes ==
+// n*(n-1)/2
 func isComplete(g *simple.UndirectedGraph) bool {
-	// show that all nodes are reachable from each other
-	nodes := graph.NodesOf(g.Nodes())
-	sort.Slice(nodes, func(i, j int) bool {
-		return nodes[i].ID() < nodes[j].ID()
-	})
+	n := len(graph.NodesOf(g.Nodes()))
 
-	for _, n := range nodes {
-		// fmt.Println(n.ID(), graph.NodesOf(k4.From(n.ID())))
-		// fmt.Println("append", append(graph.NodesOf(k4.From(n.ID())), n))
-		reachable := append(graph.NodesOf(g.From(n.ID())), n)
-		sort.Slice(reachable, func(i, j int) bool {
-			return reachable[i].ID() < reachable[j].ID()
-		})
-
-		for i := range reachable {
-			if reachable[i] != nodes[i] {
-				return false
-			}
-		}
-	}
-
-	return true
+	return len(graph.EdgesOf(g.Edges())) == n*(n-1)/2
 }
