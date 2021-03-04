@@ -2,18 +2,20 @@ package main
 
 import (
 	"fmt"
-
-	"gonum.org/v1/gonum/graph"
 )
+
+type node int64
+
+func (n node) ID() int64 {
+	return int64(n)
+}
 
 func main() {
 
+	k4 := makeComplete(4)
 	c4 := makeCycle(4)
-	// k4 := makeComplete(4)
-	// k6 := makeComplete(6)
 
-	fmt.Println("c4", graph.EdgesOf(c4.Edges()), graph.NodesOf(c4.Nodes()))
-	// fmt.Println("k4", graph.NodesOf(k4.Nodes()), graph.NodesOf(k4.Nodes()))
-	// fmt.Println("k6", graph.NodesOf(k6.Nodes()))
+	fmt.Println("k4 is complete:", isComplete(k4))
+	fmt.Println("c4 is complete: ", isComplete(c4))
 
 }
