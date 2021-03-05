@@ -1,25 +1,33 @@
 package main
 
 import (
-	"fmt"
+	"golang.org/x/exp/rand"
+	"gonum.org/v1/gonum/graph/layout"
+	"gonum.org/v1/plot"
+	"gonum.org/v1/plot/vg"
 )
-
-type node int64
-
-func (n node) ID() int64 {
-	return int64(n)
-}
 
 func main() {
 
-	k4 := makeComplete(4)
-	c4 := makeCycle(4)
-	k100 := makeComplete(100)
-	c100 := makeCycle(100)
+	k := makeComplete(6)
 
-	fmt.Println("k4 is complete:", isComplete(k4))
-	fmt.Println("c4 is complete: ", isComplete(c4))
-	fmt.Println("k100 is complete: ", isComplete(k100))
-	fmt.Println("c100 is complete: ", isComplete(c100))
+	eades := layout.EadesR2{Repulsion: 1, Rate: 0.1, Updates: 1000, Theta: 0.1, Src: rand.NewSource(1)}
+
+	o := layout.NewOptimizerR2(k, eades.Update)
+
+	for o.Update() {
+	}
+
+	p, err := plot.New()
+	if err != nil {
+		panic(err)
+	}
+
+	p.Add(render{o})
+	p.HideAxes()
+
+	if err := p.Save(10*vg.Centimeter, 10*vg.Centimeter, "graph.png"); err != nil {
+		panic(err)
+	}
 
 }
