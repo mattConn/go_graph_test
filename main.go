@@ -11,7 +11,7 @@ func main() {
 
 	k := makeComplete(6)
 
-	eades := layout.EadesR2{Repulsion: 1, Rate: 0.1, Updates: 1000, Theta: 0.1, Src: rand.NewSource(1)}
+	eades := layout.EadesR2{Repulsion: 1, Rate: 0.1, Updates: 100, Theta: 0.1, Src: rand.NewSource(1)}
 
 	o := layout.NewOptimizerR2(k, eades.Update)
 

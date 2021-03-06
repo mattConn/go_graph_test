@@ -93,3 +93,50 @@ func (nodeGlyph) DrawGlyph(c *draw.Canvas, sty draw.GlyphStyle, pt vg.Point) {
 	c.Pop()
 	c.Stroke(p)
 }
+
+// DataRange returns the minimum and maximum X and Y values
+func (p render) DataRange() (xmin, xmax, ymin, ymax float64) {
+	nodes := p.GraphR2.Nodes()
+	if nodes.Len() == 0 {
+		return
+	}
+	var xys plotter.XYs
+	if nodes.Len() >= 0 {
+		xys = make(plotter.XYs, 0, nodes.Len())
+	}
+	for nodes.Next() {
+		u := nodes.Node()
+		uid := u.ID()
+		ur2 := p.GraphR2.LayoutNodeR2(uid)
+		xys = append(xys, plotter.XY(ur2.Coord2))
+	}
+	return plotter.XYRange(xys)
+}
+
+// GlyphBoxes returns a slice of plot.GlyphBoxes, implementing the
+// plot.GlyphBoxer interface.
+func (p render) GlyphBoxes(plt *plot.Plot) []plot.GlyphBox {
+	nodes := p.GraphR2.Nodes()
+	if nodes.Len() == 0 {
+		return nil
+	}
+	var b []plot.GlyphBox
+	if nodes.Len() >= 0 {
+		b = make([]plot.GlyphBox, 0, nodes.Len())
+	}
+	for i := 0; nodes.Next(); i++ {
+		u := nodes.Node()
+		uid := u.ID()
+		ur2 := p.GraphR2.LayoutNodeR2(uid)
+
+		b = append(b, plot.GlyphBox{})
+		b[i].X = plt.X.Norm(ur2.Coord2.X)
+		b[i].Y = plt.Y.Norm(ur2.Coord2.Y)
+		r := radius
+		b[i].Rectangle = vg.Rectangle{
+			Min: vg.Point{X: -r, Y: -r},
+			Max: vg.Point{X: +r, Y: +r},
+		}
+	}
+	return b
+}
