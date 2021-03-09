@@ -1,4 +1,4 @@
-package main
+package render
 
 import (
 	"golang.org/x/exp/rand"
@@ -7,7 +7,7 @@ import (
 	"gonum.org/v1/plot/vg"
 )
 
-func main() {
+func Example_render() {
 
 	k := makeComplete(6)
 
@@ -30,4 +30,5 @@ func main() {
 		panic(err)
 	}
 
+	// Output:
 }

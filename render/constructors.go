@@ -1,4 +1,4 @@
-package main
+package render
 
 import (
 	"gonum.org/v1/gonum/graph"
